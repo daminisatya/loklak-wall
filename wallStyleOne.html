@@ -1,0 +1,34 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Point on a map D3</title>
+<link href="https://bootswatch.com/cosmo/bootstrap.min.css" rel="stylesheet" type="text/css">
+<script src="https://npmcdn.com/masonry-layout@4.0/dist/masonry.pkgd.js"></script>
+</head>
+<style type="text/css">
+.grid-sizer,
+.grid-item { width: 20%; }
+/* 2 columns */
+.grid-item--width2 { width: 40%; }
+</style>
+<body>
+   <center>
+    <h1>TWITTER WALL</h1>
+<div class="grid">
+  <!-- width of .grid-sizer used for columnWidth -->
+  <div class="grid-sizer"></div>
+  <div class="grid-item"></div>
+  <div class="grid-item grid-item--width2"></div>
+</div>
+</center>
+</body>
+<script>
+$('.grid').masonry({
+  // set itemSelector so .grid-sizer is not used in layout
+  itemSelector: '.grid-item',
+  // use element for option
+  columnWidth: '.grid-sizer',
+  percentPosition: true
+})
+</script>
+</html>
