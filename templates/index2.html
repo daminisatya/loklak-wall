@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8"> 
+        <meta charset="utf-8">
+        <title>Bootply snippet - Masonry with Bootstrap Panels</title>
+        <meta name="generator" content="Bootply" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <meta name="description" content="Use CSS3 column-width only for masonry / isotope style layout with Bootstrap panels." />
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+          *, *:before, *:after {
+            box-sizing:  border-box !important;
+           }
+
+
+          .row-fluid {
+           -moz-column-width: 10em;
+           -webkit-column-width: 25em;
+           -moz-column-gap: .5em;
+           -webkit-column-gap: .5em; 
+            
+          }
+
+          .panel {
+           display: inline-block;
+           margin:  .5em;
+           padding:  0; 
+           width:98%;
+          }
+        </style>
+        
+        <!--[if lt IE 9]>
+          <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <link rel="apple-touch-icon" href="/bootstrap/img/apple-touch-icon.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/bootstrap/img/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/bootstrap/img/apple-touch-icon-114x114.png">
+    </head>
+    
+    <!-- HTML code from Bootply.com editor -->
+    
+    <body onload="getTweets()">
+        
+        
+<div class="container-fluid">
+  <center>
+  <h3>TWEET WALL <i>for</i> <strong>{{name}}</strong></h3>
+  </center>
+  <div class="row-fluid">
+    <div class="wall">
+      
+    </div>
+  </div>
+</div>
+
+        
+        <script type='text/javascript' src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+
+        <script type='text/javascript' src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script>
+        function getTweets() {
+          $.ajax({
+            url: "http://192.168.1.7:5000/ajax/wall/{{name}}",
+            dataType: "json",
+            async: false,
+            success: function (data) {
+              console.log(data);
+              for (i=0; i<data.statuses.length; i++) {
+                var unshiftValue = "<div class=\"panel panel-default\">";
+                unshiftValue += "<div class=\"panel-heading\">@"+data.statuses[i].user.screen_name;
+                unshiftValue += "<small class=\"pull-right\">"+data.statuses[i].timestamp+"</small>";
+                unshiftValue += "</div>";
+                unshiftValue += "<div class=\"panel-body\">";
+                unshiftValue += "<div class=\"row-fluid\">";
+                unshiftValue += "<div class=\"col-md-4 col-lg-4\">";
+                unshiftValue += "<img src=\" "+data.statuses[i].user.profile_image_url_https+ "\" alt=\"\" width=\"100%\">";
+                unshiftValue += "</div>";
+                unshiftValue += "<div class=\"col-md-8 col-lg-8\">";
+                unshiftValue += data.statuses[i].text;
+                unshiftValue += "</div>";
+                unshiftValue += "</div>";
+                unshiftValue += "</div>";
+                unshiftValue += "</div>";
+
+                $('.wall').append(unshiftValue);
+              }
+            }
+          });
+        }
+        setInterval( getTweets, 30000 );
+        </script>      
+        
+    </body>
+</html>
