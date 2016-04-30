@@ -19,47 +19,63 @@
         <section class="grid-wrap">
           <ul class="grid">
             <li class="grid-sizer"></li><!-- for Masonry column width -->
-            <!-- repeat this -->
-            {% for tweet in tweets.statuses %}
-            <li>
-              <figure>
-                <img src="{{tweet.user.profile_image_url_https}}" alt="{{tweet.user.screen_name}}"/>
-                <figcaption><h3>{{tweet.text}}</h3></figcaption>
-              </figure>
-            </li>
-            {% endfor %}
-            <!-- end repeat -->
           </ul>
         </section>
         <section class="slideshow">
-          <ul>
-            <!-- loop together -->
-            {% for tweet in tweets.statuses %}
-            <li>
-              <figure>
-                <figcaption>
-                  <h3>{{tweet.user.screen_name}}</h3>
-                  <p>{{tweet.text}}</p>
-                </figcaption>
-                <img src="{{tweet.user.profile_image_url_https}}" alt="img01"/>
-              </figure>
-            </li>
-            {% endfor %}
-            <!-- loop end together -->
-          </ul>
+        <ul class="slides">
+          
+        </ul>
           <nav>
             <span class="icon nav-prev"></span>
             <span class="icon nav-next"></span>
             <span class="icon nav-close"></span>
           </nav>
-          <div class="info-keys icon">Navigate with arrow keys</div>
-        </section>
+            <div class="info-keys icon">Navigate with arrow keys</div>
+          </section>
 			</div>
 		</div>
 		<script src="{{url_for('static', filename='js/imagesloaded.pkgd.min.js')}}"></script>
 		<script src="{{url_for('static', filename='js/masonry.pkgd.min.js')}}"></script>
 		<script src="{{url_for('static', filename='js/classie.js')}}"></script>
 		<script src="{{url_for('static', filename='js/cbpGridGallery.js')}}"></script>
+    <script>
+      function getTweets() {
+        $.ajax({
+          url: "{{BASE_URL}}/ajax/wall/{{name}}",
+          dataType: "json",
+          async: false,
+          success: function (data) {
+            console.log(data);
+            var gridConstruct = "";
+            var slideShowConstruct = "";
+            var tweets = data.statuses;
+            for (var i=0; i<tweets.length; i++) {
+              gridConstruct += "<li>";
+              gridConstruct += "<figure>";
+              gridConstruct += "<img src=\""+tweets[i].user.profile_image_url_https+"\" alt=\""+tweets[i].user.screen_name+"\"/>";
+              gridConstruct += "<figcaption><h3>" + tweets[i].text + "</h3></figcaption>";
+              gridConstruct += "</figure>";
+              gridConstruct += "</li>";
+              // grid and slideshow seperately
+              slideShowConstruct += "<li>";
+              slideShowConstruct += "<figure>";
+              slideShowConstruct += "<figcaption>";
+              slideShowConstruct += "<h3>" + tweets[i].user.screen_name + "</h3>";
+              slideShowConstruct += "<p>"+tweets[i].text+"</p>";
+              slideShowConstruct += "</figcaption>";
+              slideShowConstruct += "<img src=\""+tweets[i].user.profile_image_url_https+"\" alt=\""+tweets[i].user.screen_name+"\"/>";
+              slideShowConstruct += "</figure>";
+              slideShowConstruct += "</li>";
+            }
+            
+            $('.grid').append(gridConstruct);
+            $('.slides').append(slideShowConstruct);
+          }
+        });
+        new CBPGridGallery( document.getElementById( 'grid-gallery' ) );
+      }
+      setInterval( getTweets, 30000 );
+    </script>
     <script>
       new CBPGridGallery( document.getElementById( 'grid-gallery' ) );
     </script>
