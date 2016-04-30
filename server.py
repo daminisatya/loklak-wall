@@ -16,6 +16,16 @@ ck = Blueprint('ck_page', __name__, static_folder=chartkick.js(), static_url_pat
 app.register_blueprint(ck, url_prefix='/ck')
 app.jinja_env.add_extension("chartkick.ext.charts")
 
+@app.route('/yield')
+def yieldFun():
+    def inner():
+        l = Loklak()
+        tweets = l.search('fossasia')
+        for tweet in tweets.statuses:
+            time.sleep(1)                           # Don't need this just shows the text streaming
+            yield tweet
+    return flask.Response(inner(), mimetype='text/html')  # text/html is required for most browsers to show th$
+
 @app.route('/ajax/wall/<query>', methods=['GET'])
 def ajaxwall(query=None):
 	q = query
